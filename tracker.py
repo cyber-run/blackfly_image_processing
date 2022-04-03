@@ -11,7 +11,7 @@ class EuclideanDistTracker:
 
         self.t = 1/10
 
-        self.scale = 3.45
+        self.scale = 0.325
 
     def update(self, objects_rect):
         # Initialise empty array to store box parameters and ids

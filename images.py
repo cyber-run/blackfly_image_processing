@@ -13,6 +13,8 @@ dir_path = 'D:\images\channel_10Hz'
 background = cv2.imread("Resources/background.tif", cv2.IMREAD_GRAYSCALE)
 background = background[240:840, 0:1440]
 
+out = cv2.VideoWriter('outpy.avi',cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10, (1440, 600))
+
 Files = os.listdir(dir_path)
 
 kernel = None
@@ -72,12 +74,15 @@ for File in Files:
         vel_list.append(vel)
         cv2.putText(original_image, str(id), (x, y - 25), cv2.FONT_HERSHEY_PLAIN, 1, (255, 0, 0), 2)
         cv2.putText(original_image, str(vel) + ' Micron/s', (x, y - 10), cv2.FONT_HERSHEY_PLAIN, 1, (255, 0, 0), 2)
-        y_disp.append((y - image.shape[0]/2)*3.45)
+        y_disp.append((y - image.shape[0]/2)*0.325)
 
     # Show mask
     # cv2.imshow("Mask", mask)
     # Show image
     cv2.imshow("Image", original_image)
+
+    # Save video
+    # out.write(original_image)
 
     # if q is pressed end program, wait 2 seconds between processing images for real-time viewing
     key = cv2.waitKey(100)
@@ -93,7 +98,7 @@ print(np.mean(y_disp))
 
 # Converts list obj to NP array, so values less than 1, ie the initialising 0 values can easily be removed
 vel_list = np.array(vel_list)
-vel_list = vel_list[(vel_list > 5)]
+vel_list = vel_list[(vel_list > 0.5)]
 print(np.mean(vel_list))
 
 print("--- %s seconds ---" % (time.time() - start_time))
