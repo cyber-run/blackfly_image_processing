@@ -2,16 +2,15 @@ import math
 
 
 class EuclideanDistTracker:
-    def __init__(self):
+    def __init__(self, time, scale):
         # Store the center positions of the objects
         self.center_points = {}
         # Keep the count of the IDs
         # each time a new object id detected, the count will increase by one
         self.id_count = 0
 
-        self.t = 1/10
-
-        self.scale = 0.325
+        self.t = time
+        self.scale = scale
 
     def update(self, objects_rect):
         # Initialise empty array to store box parameters and ids
@@ -35,7 +34,7 @@ class EuclideanDistTracker:
                 if dist < 80:
                     self.center_points[id] = (cx, cy)
                     # print(self.center_points)
-                    vel = (cx - pt[0]) * self.t * self.scale
+                    vel = ((cx - pt[0]) * self.scale) / self.t
                     objects_bbs_ids.append([x, y, w, h, id, vel])
                     same_object_detected = True
                     break
