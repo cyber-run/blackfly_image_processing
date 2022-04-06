@@ -1,5 +1,4 @@
 import cv2
-import PySpin
 import EasyPySpin
 import numpy as np
 
@@ -7,37 +6,65 @@ import numpy as np
 def main():
     cap = EasyPySpin.VideoCapture(0)
 
-    height = 400
-    width = 400
-
-    # Set camera variables
-    cap.set_pyspin_value("Width", width)
-    cap.set_pyspin_value("Height", height)
-
-    cap.set_pyspin_value("AcquisitionFrameRateEnable", True)
-    cap.set_pyspin_value("AcquisitionFrameRate", 5.0)
-
     # Grab some camera variables
     temp = cap.get_pyspin_value("DeviceTemperature")
-    fps = cap.get_pyspin_value("AcquisitionResultingFrameRate")
 
-    print(temp, fps)
+    count = 0
+
+    print(temp)
+
+    # _, img = cap.read()
+    # green_img = np.zeros(img.shape)
+
+    print('--------Capturing frames--------')
+    print('\nPress m to see the menu')
 
     while True:
         success, img = cap.read()
 
         cv2.imshow("Video", img)
+        # green_channel = img[:, :, 1]
+        # green_img[:, :, 1] = green_channel
+        # cv2.imshow("Green Channel", green_img)
 
-        img_canny = cv2.Canny(img,100,100)
+        if cv2.waitKey(1) & 0xFF == ord('m'):
+            print('1. Set height\n'
+                  '2. Set width\n'
+                  '3. Set exposure\n'
+                  '4. Set fps\n'
+                  '5. Save image\n'
+                  '6. Quit')
 
-        cv2.imshow("Canny Video", img_canny)
+            choice = int(input())
 
-        print(img)
-
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+            if choice == 1:
+                print("Enter frame height: ")
+                height = int(input())
+                cap.set_pyspin_value("Height", height)
+            if choice == 2:
+                print("Enter frame width: ")
+                width = int(input())
+                cap.set_pyspin_value("Width", width)
+            if choice == 3:
+                print("Enter frame exposure: ")
+                exp = int(input())
+                cap.set_pyspin_value("ExposureAuto", 'Off')
+                cap.set_pyspin_value("ExposureTime", exp)
+            if choice == 4:
+                print("Enter FPS: ")
+                fps = int(input())
+                cap.set_pyspin_value("AcquisitionFrameRateEnable", True)
+                cap.set_pyspin_value("AcquisitionFrameRate", fps)
+            if choice == 5:
+                cv2.imwrite("frame%d.png" % count, img)  # save frame as JPEG file
+                print('Successfully saved: ' + str(count))
+                count += 1
+            if choice == 6:
+                break
 
     cap.release()
+
+    cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":

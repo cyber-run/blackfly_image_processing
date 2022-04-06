@@ -8,8 +8,8 @@ print("Enter frame width: ")
 width = int(input())
 print("Enter frame height: ")
 height = int(input())
-print("Enter FPS: ")
-fps = int(input())
+print("Enter exposure time: ")
+exp = int(input())
 print('Enter number of photos to take: ')
 num = int(input())
 
@@ -17,15 +17,15 @@ num = int(input())
 cap.set_pyspin_value("Width", width)
 cap.set_pyspin_value("Height", height)
 
-cap.set_pyspin_value("AcquisitionFrameRateEnable", True)
-cap.set_pyspin_value("AcquisitionFrameRate", fps)
+cap.set_pyspin_value("ExposureAuto", 'Off')
+cap.set_pyspin_value("ExposureTime", exp)
 
 # Grab FPS for check
 fps = cap.get_pyspin_value("AcquisitionResultingFrameRate")
 
 print('--------Capturing at frame rate: ' + str(fps) + '--------')
 
-count = 0
+count = 1
 
 success = True
 while count < num + 1:
